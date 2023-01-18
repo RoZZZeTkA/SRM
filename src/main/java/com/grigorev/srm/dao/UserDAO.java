@@ -2,7 +2,6 @@ package com.grigorev.srm.dao;
 
 import com.grigorev.srm.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -37,8 +36,13 @@ public class UserDAO {
         }
     }
 
-    public void save(User user) {
-        jdbcTemplate.update("INSERT INTO usr (first_name, second_name, role, username, password) VALUES (?, ?, ?, ?, ?)",
-                user.getFirstName(), user.getSecondName(), user.getRole().name(), user.getUsername(), user.getPassword());
+    public boolean existsByUsername(String username){
+        return jdbcTemplate.queryForObject("SELECT EXISTS (SELECT * FROM usr WHERE username = ?)", Boolean.class, username);
+    }
+
+    public User save(User user) {
+        jdbcTemplate.update("INSERT INTO usr (role, username, password) VALUES (?, ?, ?)",
+                user.getRole().name(), user.getUsername(), user.getPassword());
+        return findByUsername(user.getUsername());
     }
 }

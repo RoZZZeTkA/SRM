@@ -34,18 +34,16 @@ public class UserService {
     }
 
     public User save(User user) {
-        if (user.getFirstName() == null ||
-            user.getSecondName() == null ||
+        if (user.getRole() == null ||
             user.getUsername() == null ||
             user.getPassword() == null) {
-            throw new IllegalStateException("Some field are null " + user);
+            throw new IllegalStateException("Some fields are null " + user);
         }
-        if (userDAO.findByUsername(user.getUsername()) != null) {
+        if (userDAO.existsByUsername(user.getUsername())) {
             throw new IllegalStateException("Username " + user.getUsername() + " is already taken");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDAO.save(user);
-        user.setId(userDAO.findByUsername(user.getUsername()).getId());
+        user = userDAO.save(user);
         user.setPassword("");
         return user;
     }

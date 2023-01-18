@@ -28,9 +28,9 @@ public class TestController {
     }
 
     private static final List<User> USERS = Arrays.asList(
-            new User(1, "Tom", "Taylor", Role.ADMIN, "tom", "tom"),
-            new User(2, "Ben", "Butcher", Role.USER, "ben", "ben"),
-            new User(3, "Marry", "Morrigan", Role.USER, "marry", "marry")
+            new User(1, Role.ADMIN, "tom", "tom"),
+            new User(2, Role.USER, "ben", "ben"),
+            new User(3, Role.USER, "marry", "marry")
     );
 
     @GetMapping("hello")
